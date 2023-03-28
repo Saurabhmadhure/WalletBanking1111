@@ -143,7 +143,7 @@ import static org.mockito.Mockito.*;
         accountDetails.setBalance(5000);
         accountDetails.setDetails(user);
         List<Transaction> transactions = new ArrayList<>();
-        Transaction mockTransaction = new Transaction(500, 0, 1, 456, new Date(), "Transaction message", "Success", "0");
+        Transaction mockTransaction = new Transaction(500, 0, 1, 1456, new Date(), "Transaction message", "Success",50, 4500);
         transactions.add(mockTransaction);
         accountDetails.setTransactions(transactions);
 

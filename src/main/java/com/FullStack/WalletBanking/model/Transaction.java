@@ -21,9 +21,9 @@ public class Transaction {
  private int sendAmount;
  private int receiveAmount;
  private int deposited;
-    public Transaction(int sendAmount, int deposited , int senderId, int receiverId, Date date, String message, String status, String cashback) {
+    public Transaction(int sendAmount, int deposited , int senderId, int receiverId, Date date, String message, String status, String cashback,int senderAvailable_balance) {
         this.sendAmount = sendAmount;
-
+        this.senderAvailable_balance=senderAvailable_balance;
         this.deposited=deposited;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -32,6 +32,7 @@ public class Transaction {
         this.status = status;
         this.cashback = cashback;
      }
+     private int senderAvailable_balance;
 
     private int senderId;
     private int receiverId;

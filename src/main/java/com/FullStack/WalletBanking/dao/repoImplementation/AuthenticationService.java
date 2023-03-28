@@ -1,14 +1,15 @@
 package com.FullStack.WalletBanking.dao.repoImplementation;
 
+import com.FullStack.WalletBanking.api.AuthenticationRequest;
+import com.FullStack.WalletBanking.api.AuthenticationResponse;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.OtpClassRepository;
 import com.FullStack.WalletBanking.dao.repository.UserRepo;
-import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
 import com.FullStack.WalletBanking.entityUtility.OtpClass;
 import com.FullStack.WalletBanking.model.AccountDetails;
+import com.FullStack.WalletBanking.model.RegisterRequest;
 import com.FullStack.WalletBanking.model.domain.Role;
 import com.FullStack.WalletBanking.model.domain.User;
-import com.FullStack.WalletBanking.model.RegisterRequest;
 import com.FullStack.WalletBanking.service.EmailKafkaService;
 import com.FullStack.WalletBanking.utility.GenAccountNumber;
 import com.FullStack.WalletBanking.utility.SequenceGeneratorService;
@@ -16,8 +17,6 @@ import com.FullStack.WalletBanking.webConfig.Config.JwtService;
 import com.FullStack.WalletBanking.webConfig.Token;
 import com.FullStack.WalletBanking.webConfig.TokenRepository;
 import com.FullStack.WalletBanking.webConfig.TokenType;
-import com.FullStack.WalletBanking.api.AuthenticationRequest;
-import com.FullStack.WalletBanking.api.AuthenticationResponse;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -64,7 +63,7 @@ public class AuthenticationService {
     private String jwtSecret;
     @Autowired
     private EmailKafkaService emailKafkaService;
-    private static final Logger logger = LoggerFactory.getLogger(AccDetailTemp.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 
 
@@ -140,12 +139,14 @@ public class AuthenticationService {
 
         Integer generatedOTP = savedOtpClass.getGeneratedOTP();
 
+
         logger.info("Generated OTP: " + generatedOTP);
         logger.info("User-entered OTP: " + otpClass.getUserEnteredOTP());
 
         if(generatedOTP.equals(otpClass.getUserEnteredOTP())){
             logger.info("OTP matched");
             savedOtpClass.setUserEnteredOTP(otpClass.getUserEnteredOTP());
+            savedOtpClass.setVerified(true);
             otpClassRepository.save(savedOtpClass);
             return true;
         }
@@ -163,7 +164,10 @@ public class AuthenticationService {
                   new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
           );
 
-
+//          OtpClass savedOtpClass = otpClassRepository.findByEmail(request.getEmail());
+//          if(savedOtpClass.getVerified().equals(false)){
+//              return null ;
+//          }
           var acount=accountDetailsRepo.findByDetails_Email(request.getEmail()).orElseThrow();
           var user=repository.findByEmail(request.getEmail()).orElseThrow();
 

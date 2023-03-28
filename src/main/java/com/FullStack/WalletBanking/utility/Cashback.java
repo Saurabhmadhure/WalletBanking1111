@@ -3,12 +3,12 @@ package com.FullStack.WalletBanking.utility;
 import java.util.Random;
 
 public class Cashback {
-    public static int generateCashback(){
+    public static int generateCashback(int amount){
 
         Random random=new Random();
-        int bound =100;
+        System.out.println(  (random.nextInt(amount)*0.010));
 
-        return random.nextInt(bound);
+        return (int) (random.nextInt(amount)*0.010);
 
     }
 }

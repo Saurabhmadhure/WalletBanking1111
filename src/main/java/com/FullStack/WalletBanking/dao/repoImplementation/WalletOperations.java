@@ -1,30 +1,25 @@
 package com.FullStack.WalletBanking.dao.repoImplementation;
 
+import com.FullStack.WalletBanking.api.BalanceResponse;
+import com.FullStack.WalletBanking.api.DepositResponse;
 import com.FullStack.WalletBanking.customException.NotSufficientBalance;
 import com.FullStack.WalletBanking.customException.TransactionBadRequest;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.CashbackEarned;
 import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
-
-import com.FullStack.WalletBanking.model.Cashback_Earned;
-import com.FullStack.WalletBanking.utility.Cashback;
 import com.FullStack.WalletBanking.model.AccountDetails;
-
 import com.FullStack.WalletBanking.model.Balance;
-
+import com.FullStack.WalletBanking.model.Cashback_Earned;
 import com.FullStack.WalletBanking.model.Transaction;
-
-
-import com.FullStack.WalletBanking.api.BalanceResponse;
-import com.FullStack.WalletBanking.api.DepositResponse;
+import com.FullStack.WalletBanking.utility.Cashback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
@@ -92,6 +87,14 @@ public class WalletOperations {
         return  response;
     }
 
+//    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value=TransactionBadRequest.class)
+    public ResponseEntity<TransactionBadRequest> customException(TransactionBadRequest str){
+     return new ResponseEntity<>(str,HttpStatus.NOT_FOUND);
+
+    }
+
+
     public ResponseEntity<Transaction> sendMoney(@RequestBody Transaction transaction) throws TransactionBadRequest {
 
         transaction.setDate(new Date(Calendar.getInstance().getTime().getTime()));
@@ -102,7 +105,7 @@ public class WalletOperations {
 
         if (sender == null || receiver == null||sender.getAccNumber()==receiver.getAccNumber()) {
             logger.info("No wallet for sender or receiver");
-            throw new TransactionBadRequest("No wallet found for sender or receiver");
+            throw new TransactionBadRequest(  "No wallet found for sender or receiver");
 
         }
         AccountDetails senderWallet = accountDetailsRepo.findById(sender.getAccNumber()).get();
@@ -116,18 +119,19 @@ public class WalletOperations {
 
         int amount = transaction.getSendAmount();
         if(amount==0){
-            throw new TransactionBadRequest("Amount Should be more than 0");
+            throw new TransactionBadRequest(  "Amount Should be more than 0");
         }
         else {
 
             if (senderWallet.getBalance() < amount) {
-                throw new TransactionBadRequest("Not Having Sufficient Balance");
+                throw new TransactionBadRequest(  "Not Having Sufficient Balance");
             }
             try {
-                int cashb = Cashback.generateCashback();
+                int cashb = Cashback.generateCashback(amount);
                 logger.info(String.valueOf(cashb));
                 logger.info("Congrulations You got Cashback of " + cashb + " rupees");
-                senderWallet.setBalance((senderWallet.getBalance() - amount) + cashb);
+                int senderAvailableBal=(senderWallet.getBalance() - amount) + cashb;
+                senderWallet.setBalance(senderAvailableBal);
                 senderWallet.setIsRedeemed(cashb + " is redemmed");
                 Optional<Cashback_Earned> optionalSenderCashback = cashbackrepo.findById(senderWallet.getAccNumber());
                 Cashback_Earned senderCashback;
@@ -151,6 +155,7 @@ public class WalletOperations {
                 senderTransaction.setStatus("SUCCESS");
                 senderTransaction.setDate(new Date(Calendar.getInstance().getTime().getTime()));
                 senderTransaction.setMessage("Transferred to Acc. No :[" + receiver.getAccNumber() + "]");
+                transaction.setSenderAvailable_balance(senderAvailableBal);
                 senderWallet.getTransactions().add(senderTransaction);
                 transaction.setMessage("Transferred to Acc. No :[" + receiver.getAccNumber() + "]");
                 transaction.setStatus("Success");
@@ -192,7 +197,7 @@ public class WalletOperations {
                 senderWallet.getTransactions().add(failedTransaction);
                 accountDetailsRepo.save(senderWallet);
 
-                throw new TransactionBadRequest("Not Having Sufficient Balance");
+                throw new TransactionBadRequest( "Not Having Sufficient Balance");
             } finally {
             }
         }

@@ -1,9 +1,9 @@
 package com.FullStack.WalletBanking.customException;
 
 
-    public class TransactionBadRequest extends RuntimeException {
+public class TransactionBadRequest extends RuntimeException {
 
-        public TransactionBadRequest(String message) {
+        public TransactionBadRequest(   String message) {
             super(message);
         }
 

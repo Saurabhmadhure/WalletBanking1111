@@ -25,5 +25,6 @@ public class OtpClass {
         this.email = email;
 
     }
+    public  Boolean verified;
 
 }
