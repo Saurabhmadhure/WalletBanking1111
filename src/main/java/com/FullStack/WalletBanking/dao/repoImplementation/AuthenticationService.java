@@ -128,6 +128,8 @@ public class AuthenticationService {
     }
     public boolean verifyOTP(OtpClass otpClass) {
         OtpClass savedOtpClass = otpClassRepository.findByEmail(otpClass.getEmail());
+        logger.info("Info Of otp Repo"+savedOtpClass.getGeneratedOTP());
+        logger.info(String.valueOf(savedOtpClass));
         if (savedOtpClass == null) {
             logger.info("OtpClass not found for email: " + otpClass.getEmail());
             return false;

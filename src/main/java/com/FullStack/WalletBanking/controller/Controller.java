@@ -1,25 +1,28 @@
 package com.FullStack.WalletBanking.controller;
-import com.FullStack.WalletBanking.customException.TransactionBadRequest;
-import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
-import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
-import com.FullStack.WalletBanking.model.*;
-import com.FullStack.WalletBanking.dao.repoImplementation.WalletOperations;
-import com.FullStack.WalletBanking.service.EmailServiceImpl;
-import com.FullStack.WalletBanking.webConfig.Config.LogoutService;
+
 import com.FullStack.WalletBanking.api.BalanceResponse;
 import com.FullStack.WalletBanking.api.DepositResponse;
+import com.FullStack.WalletBanking.customException.TransactionBadRequest;
+import com.FullStack.WalletBanking.dao.repoImplementation.WalletOperations;
+import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
+import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
+import com.FullStack.WalletBanking.model.AccountDetails;
+import com.FullStack.WalletBanking.model.Balance;
+import com.FullStack.WalletBanking.model.Transaction;
+import com.FullStack.WalletBanking.service.EmailServiceImpl;
+import com.FullStack.WalletBanking.webConfig.Config.LogoutService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/accounts")
 @CrossOrigin(origins = "*")
@@ -84,6 +87,13 @@ public class Controller {
         return walletOperations.userTransaction(accNo);
 
     }
+
+
+
+
+//    @PostMapping("/Demo")
+
+
     @GetMapping("/cashback/{accountNumber}")
     public ResponseEntity<?> accountCashback(@PathVariable int accountNumber) throws JsonProcessingException {
         return walletOperations.totalCashbackEarned(accountNumber);
