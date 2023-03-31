@@ -1,4 +1,4 @@
-package com.FullStack.WalletBanking.api;
+package com.FullStack.WalletBanking.request_response_Helper;
 
 
 import lombok.AllArgsConstructor;

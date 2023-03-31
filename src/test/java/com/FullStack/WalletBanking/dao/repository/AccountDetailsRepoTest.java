@@ -1,7 +1,7 @@
 package com.FullStack.WalletBanking.dao.repository;
 
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.domain.User;
+import com.FullStack.WalletBanking.model.User;
 
 import com.FullStack.WalletBanking.model.Transaction;
 import jakarta.mail.MessagingException;

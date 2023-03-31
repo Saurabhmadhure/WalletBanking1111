@@ -1,8 +1,7 @@
-package com.FullStack.WalletBanking.service;
+package com.FullStack.WalletBanking.EmailService;
 
 import com.FullStack.WalletBanking.dao.repository.EmailService;
-import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
-import jakarta.mail.MessagingException;
+ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ public class EmailServiceImpl implements EmailService {
 
 
 
-    private static final Logger logger = LoggerFactory.getLogger(AccDetailTemp.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     public String sendEmail(String to, Integer otp) throws MessagingException {
 

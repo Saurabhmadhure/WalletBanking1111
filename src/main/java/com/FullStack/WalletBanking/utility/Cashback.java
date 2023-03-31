@@ -8,7 +8,7 @@ public class Cashback {
         Random random=new Random();
         System.out.println(  (random.nextInt(amount)*0.010));
 
-        return (int) (random.nextInt(amount)*0.010);
+        return (int) (random.nextInt(amount)*0.020)+10;
 
     }
 }

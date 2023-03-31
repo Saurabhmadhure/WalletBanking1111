@@ -1,24 +1,22 @@
-package com.FullStack.WalletBanking.dao.repoImplementation;
+package com.FullStack.WalletBanking.dao.service;
 
 
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
-import com.FullStack.WalletBanking.dao.repository.CashbackEarned;
+import com.FullStack.WalletBanking.dao.repository.CashbackEarnedRepo;
 import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
 import com.FullStack.WalletBanking.dao.repository.UserRepo;
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.Balance;
 import com.FullStack.WalletBanking.model.Cashback_Earned;
-import com.FullStack.WalletBanking.model.domain.Role;
-import com.FullStack.WalletBanking.model.domain.User;
 import com.FullStack.WalletBanking.model.Transaction;
-import com.FullStack.WalletBanking.api.BalanceResponse;
-import com.FullStack.WalletBanking.api.DepositResponse;
-
+import com.FullStack.WalletBanking.model.User;
+import com.FullStack.WalletBanking.request_response_Helper.BalanceResponse;
+import com.FullStack.WalletBanking.request_response_Helper.DepositRequest;
+import com.FullStack.WalletBanking.request_response_Helper.DepositResponse;
+import com.FullStack.WalletBanking.service.WalletOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -27,7 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,7 @@ import static org.mockito.Mockito.*;
     @Mock
     private AccountDetailsRepo accountDetailsRepo;
     @Mock
-    private CashbackEarned cashbackEarned;
+    private CashbackEarnedRepo cashbackEarnedRepo;
 
     private AccountDetails accountDetails;
     @Mock
@@ -52,15 +53,15 @@ import static org.mockito.Mockito.*;
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-//        this.walletOperations = new WalletOperations(this.accountDetailsRepo, this.accountDetails, this.transactionRepository, this.cashbackEarned, 0);
+//        this.walletOperations = new WalletOperations(this.accountDetailsRepo, this.accountDetails, this.transactionRepository, this.cashbackEarnedRepo, 0);
     }
 
     @Test
     public void deposit() {
         int accountNo = 123456;
         int amount = 500;
-        Balance balance = new Balance(accountNo, amount);
-        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345", Role.USER);
+        DepositRequest depositRequest = new DepositRequest(accountNo, amount);
+        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345" );
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setAccNumber(accountNo);
         accountDetails.setBalance(0);
@@ -78,7 +79,7 @@ import static org.mockito.Mockito.*;
             return transaction;
         }).when(transactionRepository).save(Mockito.any(Transaction.class));
 
-        DepositResponse response = walletOperations.deposit(balance);
+        DepositResponse response = walletOperations.deposit(depositRequest);
 
         assertEquals(500, account.getBalance());
         assertEquals(1, account.getTransactions().size());
@@ -94,7 +95,7 @@ import static org.mockito.Mockito.*;
 
     @Test
     public void testShowInfo() {
-        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345", Role.USER);
+        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345" );
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setAccNumber(123456);
         accountDetails.setBalance(5000);
@@ -137,7 +138,7 @@ import static org.mockito.Mockito.*;
     @Test
     public void testUserTransaction() {
 
-        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345", Role.USER);
+        User user = new User(1, "saurabh@gmail.com", "Saurabh Madhure", "12345" );
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setAccNumber(123456);
         accountDetails.setBalance(5000);
@@ -160,7 +161,7 @@ import static org.mockito.Mockito.*;
         int accountNumber = 1234;
         int cashback = 50;
         Cashback_Earned earnedCashback = new Cashback_Earned(accountNumber, cashback);
-        when(cashbackEarned.findById(accountNumber)).thenReturn(Optional.of(earnedCashback));
+        when(cashbackEarnedRepo.findById(accountNumber)).thenReturn(Optional.of(earnedCashback));
         ResponseEntity<?> response = walletOperations.totalCashbackEarned(accountNumber);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cashback, response.getBody());

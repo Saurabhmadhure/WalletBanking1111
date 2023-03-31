@@ -1,6 +1,6 @@
 package com.FullStack.WalletBanking.webConfig;
 
-import com.FullStack.WalletBanking.model.domain.User;
+import com.FullStack.WalletBanking.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

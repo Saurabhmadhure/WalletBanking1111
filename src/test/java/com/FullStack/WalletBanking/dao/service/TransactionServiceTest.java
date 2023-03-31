@@ -1,8 +1,10 @@
-package com.FullStack.WalletBanking.dao.repoImplementation;
+package com.FullStack.WalletBanking.dao.service;
 
 import com.FullStack.WalletBanking.customException.TransactionBadRequest;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.model.Transaction;
+import com.FullStack.WalletBanking.request_response_Helper.SendMoneyResponse;
+import com.FullStack.WalletBanking.service.WalletOperations;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,7 +35,7 @@ private AccountDetailsRepo accountDetailsRepo;
         WalletOperations mockedWalletOperations = Mockito.mock(WalletOperations.class);
         Mockito.when(mockedWalletOperations.sendMoney(Mockito.any(Transaction.class))).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-         ResponseEntity<Transaction> response = mockedWalletOperations.sendMoney(transaction);
+         ResponseEntity<SendMoneyResponse> response = mockedWalletOperations.sendMoney(transaction);
 
              assertEquals(HttpStatus.OK, response.getStatusCode());
     }

@@ -1,9 +1,8 @@
-package com.FullStack.WalletBanking.service;
+package com.FullStack.WalletBanking.EmailService;
 
 import com.FullStack.WalletBanking.dao.repository.EmailService;
 import com.FullStack.WalletBanking.dao.repository.OtpClassRepository;
-import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
-import com.FullStack.WalletBanking.entityUtility.OtpClass;
+import com.FullStack.WalletBanking.model.OtpClass;
 import com.FullStack.WalletBanking.utility.GenerateOTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,7 @@ public class EmailKafkaService {
     private EmailService emailService;
     @Autowired
     private OtpClassRepository otpClassRepository;
-    private static final Logger logger = LoggerFactory.getLogger(AccDetailTemp.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailKafkaService.class);
 
     public EmailKafkaService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
@@ -38,11 +37,6 @@ public class EmailKafkaService {
         kafkaTemplate.send(topic, message);}
 
 
-
-
-
-
-
     @KafkaListener(topics = "email-topic", groupId = "email-group")
     public void listenEmail(String message) {
         try {
@@ -51,8 +45,10 @@ public class EmailKafkaService {
             Integer otp = Integer.parseInt(parts[1].substring(5));
             emailService.sendEmail(to, otp);
             System.out.println("Sending email to: " + to + ", OTP: " + otp.toString());
-        } catch (MessagingException | jakarta.mail.MessagingException e) {
+        } catch (MessagingException e) {
             // handle exception
+        } catch (jakarta.mail.MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
 }

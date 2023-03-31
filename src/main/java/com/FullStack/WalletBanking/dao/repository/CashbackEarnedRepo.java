@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CashbackEarned extends MongoRepository<Cashback_Earned,Integer> {
+public interface CashbackEarnedRepo extends MongoRepository<Cashback_Earned,Integer> {
 
 }

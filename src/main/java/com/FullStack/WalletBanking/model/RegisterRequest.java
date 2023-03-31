@@ -1,7 +1,5 @@
 package com.FullStack.WalletBanking.model;
 
-import com.FullStack.WalletBanking.model.domain.User;
-import com.FullStack.WalletBanking.model.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +33,7 @@ public class RegisterRequest {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setRole(Role.USER);
+//        user.setUserRole(User_Role.USER);
         return user;
     }
     public AccountDetails toAccountDetails() {

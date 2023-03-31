@@ -1,19 +1,18 @@
 package com.FullStack.WalletBanking.controller;
 
-import com.FullStack.WalletBanking.dao.repoImplementation.AuthenticationService;
+import com.FullStack.WalletBanking.EmailService.EmailKafkaService;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.OtpClassRepository;
 import com.FullStack.WalletBanking.dao.repository.UserRepo;
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.domain.Role;
-import com.FullStack.WalletBanking.model.domain.User;
 import com.FullStack.WalletBanking.model.RegisterRequest;
-import com.FullStack.WalletBanking.service.EmailKafkaService;
+import com.FullStack.WalletBanking.model.User;
+import com.FullStack.WalletBanking.request_response_Helper.AuthenticationRequest;
+import com.FullStack.WalletBanking.request_response_Helper.AuthenticationResponse;
+import com.FullStack.WalletBanking.service.AuthenticationService;
 import com.FullStack.WalletBanking.utility.SequenceGeneratorService;
 import com.FullStack.WalletBanking.webConfig.Config.JwtService;
 import com.FullStack.WalletBanking.webConfig.TokenRepository;
-import com.FullStack.WalletBanking.api.AuthenticationRequest;
-import com.FullStack.WalletBanking.api.AuthenticationResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -98,7 +97,7 @@ public class RegistrationTest {
         savedUser.setUserId(1);
         savedUser.setEmail(registerRequest.getEmail());
         savedUser.setName(registerRequest.getName());
-        savedUser.setRole(Role.USER);
+//        savedUser.setUserRole(User_Role.USER);
         savedUser.setPassword(registerRequest.getPassword());
 
         AccountDetails accountDetails = new AccountDetails();
@@ -156,7 +155,7 @@ public class RegistrationTest {
         User us = new User();
 
         us.setEmail("saurabhmadhure@gmail.com");
-        us.setRole(Role.USER);
+//        us.setUserRole(User_Role.USER);
         us.setName("Saurabh");
         us.setPassword("Password123");
 

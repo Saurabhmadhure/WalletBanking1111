@@ -1,31 +1,23 @@
 package com.FullStack.WalletBanking.controller;
 
-import com.FullStack.WalletBanking.dao.repoImplementation.WalletOperations;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.Balance;
-import com.FullStack.WalletBanking.model.domain.Role;
-import com.FullStack.WalletBanking.model.domain.User;
 import com.FullStack.WalletBanking.model.Transaction;
-import com.FullStack.WalletBanking.api.DepositResponse;
-
+import com.FullStack.WalletBanking.model.User;
+import com.FullStack.WalletBanking.request_response_Helper.DepositRequest;
+import com.FullStack.WalletBanking.request_response_Helper.DepositResponse;
+import com.FullStack.WalletBanking.service.WalletOperations;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
- import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.*;
-
-
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +40,7 @@ public class AccountTestCases {
 
 
     @InjectMocks
-    private Controller controller;
+    private AccountController accountController;
     @InjectMocks
     private WalletOperations walletOperations;
 
@@ -63,8 +55,8 @@ public class AccountTestCases {
         AccountDetails account = new AccountDetails(1234, 500, new User("Saurabh Madhure"), new ArrayList<Transaction>());
         accountDetailsRepo.save(account);
 
-        Balance balance = new Balance(1234, 100); // account number 1234, deposit amount 100
-        walletOperations.deposit(balance);
+        DepositRequest depositRequest = new DepositRequest(1234, 100); // account number 1234, deposit amount 100
+        walletOperations.deposit(depositRequest);
 
         List<Transaction> transactions = transactionRepository.findAll();
         assertEquals(1, transactions.size());
@@ -82,8 +74,8 @@ public class AccountTestCases {
         AccountDetails account = new AccountDetails(1234, 500, new User("Saurabh Madhure"), new ArrayList<Transaction>());
         accountDetailsRepo.save(account);
 
-        Balance balance = new Balance(1234, 100); // account number 1234, deposit amount 100
-        walletOperations.deposit(balance);
+        DepositRequest depositRequest = new DepositRequest(1234, 100); // account number 1234, deposit amount 100
+        walletOperations.deposit(depositRequest);
 
         AccountDetails updatedAccount = accountDetailsRepo.findById(1234).get();
         assertEquals(600, updatedAccount.getBalance());
@@ -94,8 +86,8 @@ public class AccountTestCases {
         AccountDetails account = new AccountDetails(1234, 500, new User("Saurabh Madhure"), new ArrayList<Transaction>());
         accountDetailsRepo.save(account);
 
-        Balance balance = new Balance(1234, 100); // account number 1234, deposit amount 100
-        DepositResponse response = walletOperations.deposit(balance);
+        DepositRequest depositRequest = new DepositRequest(1234, 100); // account number 1234, deposit amount 100
+        DepositResponse response = walletOperations.deposit(depositRequest);
 
         assertNotNull(response);
         assertEquals(100, response.getDeposited_Amount());
@@ -109,7 +101,7 @@ public class AccountTestCases {
     public void testShowUserInfo() throws Exception {
         // Mock account details data
         int accNumber = 123456;
-        User user = User.builder().userId(1).email("saurabh@gmail.com").name("Saurabh").password("Password123").role(Role.USER).build();
+        User user = User.builder().userId(1).email("saurabh@gmail.com").name("Saurabh").password("Password123").build();
         AccountDetails accountDetails = AccountDetails.builder().accNumber(accNumber).balance(1000).details(user).build();
         Mockito.when(accountDetailsRepository.findById(accNumber)).thenReturn(Optional.ofNullable(accountDetails));
 
@@ -122,7 +114,7 @@ public class AccountTestCases {
                 .andExpect((ResultMatcher) jsonPath("$.details.email").value("saurabh@gmail.com"))
                 .andExpect((ResultMatcher) jsonPath("$.details.name").value("Saurabh"))
                 .andExpect((ResultMatcher) jsonPath("$.details.password").value("Password123"))
-                .andExpect((ResultMatcher) jsonPath("$.details.role").value("USER"));
+                .andExpect((ResultMatcher) jsonPath("$.details.userRole").value("USER"));
 
     }
 

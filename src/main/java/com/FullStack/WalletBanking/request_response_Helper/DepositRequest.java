@@ -1,4 +1,4 @@
-package com.FullStack.WalletBanking.model;
+package com.FullStack.WalletBanking.request_response_Helper;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Balance {
+public class DepositRequest {
 @Id
     private int accountNo;
     private int amount;

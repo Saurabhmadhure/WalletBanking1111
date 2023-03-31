@@ -1,14 +1,13 @@
 package com.FullStack.WalletBanking.controller;
 
-import com.FullStack.WalletBanking.dao.repoImplementation.WalletOperations;
+import com.FullStack.WalletBanking.EmailService.EmailServiceImpl;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.TransactionRepository;
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.domain.Role;
-import com.FullStack.WalletBanking.model.domain.User;
-import com.FullStack.WalletBanking.service.EmailServiceImpl;
+import com.FullStack.WalletBanking.model.User;
+import com.FullStack.WalletBanking.request_response_Helper.BalanceResponse;
+import com.FullStack.WalletBanking.service.WalletOperations;
 import com.FullStack.WalletBanking.webConfig.Config.LogoutService;
-import com.FullStack.WalletBanking.api.BalanceResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -35,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
  @RunWith(MockitoJUnitRunner.class)
-public class ControllerTest {
+public class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,7 +58,7 @@ public class ControllerTest {
     public void testShowUserInfo() throws Exception {
         // Mock account details data
         int accNumber = 123456;
-        User user = User.builder().userId(1).email("saurabh@gmail.com").name("Saurabh").password("Password123").role(Role.USER).build();
+        User user = User.builder().userId(1).email("saurabh@gmail.com").name("Saurabh").password("Password123").build();
         AccountDetails accountDetails = AccountDetails.builder().accNumber(accNumber).balance(1000).details(user).build();
         Mockito.when(accountDetailsRepo.findById(accNumber)).thenReturn(Optional.ofNullable(accountDetails));
 
@@ -72,7 +71,7 @@ public class ControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.details.email").value("saurabh@gmail.com"))
                 .andExpect((ResultMatcher) jsonPath("$.details.name").value("Saurabh"))
                 .andExpect((ResultMatcher) jsonPath("$.details.password").value("Password123"))
-                .andExpect((ResultMatcher) jsonPath("$.details.role").value("USER"));
+                .andExpect((ResultMatcher) jsonPath("$.details.userRole").value("USER"));
 
     }
     @Test

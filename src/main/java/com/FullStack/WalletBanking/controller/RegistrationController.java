@@ -1,22 +1,17 @@
 package com.FullStack.WalletBanking.controller;
 
+import com.FullStack.WalletBanking.EmailService.EmailServiceImpl;
+import com.FullStack.WalletBanking.request_response_Helper.AuthenticationRequest;
+import com.FullStack.WalletBanking.request_response_Helper.AuthenticationResponse;
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
-import com.FullStack.WalletBanking.entityUtility.AccDetailTemp;
-import com.FullStack.WalletBanking.entityUtility.OtpClass;
- import com.FullStack.WalletBanking.model.domain.User;
-
+import com.FullStack.WalletBanking.model.OtpClass;
 import com.FullStack.WalletBanking.model.RegisterRequest;
-
-import com.FullStack.WalletBanking.service.EmailServiceImpl;
-import com.FullStack.WalletBanking.dao.repoImplementation.AuthenticationService;
- import com.FullStack.WalletBanking.api.AuthenticationRequest;
-import com.FullStack.WalletBanking.api.AuthenticationResponse;
-
+import com.FullStack.WalletBanking.model.User;
+import com.FullStack.WalletBanking.service.AuthenticationService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +38,8 @@ public class RegistrationController {
 
 
 
-    private static final Logger logger = LoggerFactory.getLogger(AccDetailTemp.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+
     @PostMapping(path = "/register")
     public AuthenticationResponse registerData(@RequestBody RegisterRequest request ){
 

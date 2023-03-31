@@ -1,6 +1,6 @@
 package com.FullStack.WalletBanking.dao.repository;
 
-import com.FullStack.WalletBanking.model.domain.User;
+import com.FullStack.WalletBanking.model.User;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

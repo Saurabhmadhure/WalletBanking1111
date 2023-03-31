@@ -1,14 +1,15 @@
-package com.FullStack.WalletBanking.dao.repoImplementation;
+package com.FullStack.WalletBanking.dao.service;
 
 import com.FullStack.WalletBanking.dao.repository.AccountDetailsRepo;
 import com.FullStack.WalletBanking.dao.repository.UserRepo;
 import com.FullStack.WalletBanking.model.AccountDetails;
-import com.FullStack.WalletBanking.model.domain.User;
+import com.FullStack.WalletBanking.model.User;
 import com.FullStack.WalletBanking.model.RegisterRequest;
-import com.FullStack.WalletBanking.service.EmailKafkaService;
+import com.FullStack.WalletBanking.EmailService.EmailKafkaService;
+import com.FullStack.WalletBanking.service.AuthenticationService;
 import com.FullStack.WalletBanking.utility.SequenceGeneratorService;
 import com.FullStack.WalletBanking.webConfig.Config.JwtService;
-import com.FullStack.WalletBanking.api.AuthenticationResponse;
+import com.FullStack.WalletBanking.request_response_Helper.AuthenticationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

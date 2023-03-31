@@ -4,10 +4,9 @@ package com.FullStack.WalletBanking.customException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ExceptionHandlerController {
+public class ExceptionHandler {
 
 //    @ExceptionHandler(TransactionBadRequest.class)
 //    public ResponseEntity<Object> handleTransactionBadRequest(TransactionBadRequest ex) {
@@ -24,7 +23,7 @@ public class ExceptionHandlerController {
 //        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
 //        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
-@ExceptionHandler(TransactionBadRequest.class)
+@org.springframework.web.bind.annotation.ExceptionHandler(TransactionBadRequest.class)
 public ResponseEntity<String> handleTransactionBadRequest(TransactionBadRequest ex) {
     return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)

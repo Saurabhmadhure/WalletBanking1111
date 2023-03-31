@@ -1,4 +1,4 @@
-package com.FullStack.WalletBanking.entityUtility;
+package com.FullStack.WalletBanking.utility;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.FullStack.WalletBanking.model.domain;
+package com.FullStack.WalletBanking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -14,8 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.util.Collection;
 import java.util.List;
 @Data
@@ -34,16 +32,15 @@ public class User implements UserDetails {
     private String name;
 
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
-    public User(int userId, String email, String name, String password ) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.password = password;
 
-     }
+//    public User(int userId, String email, String name, String password ) {
+//        this.userId = userId;
+//        this.email = email;
+//        this.name = name;
+//        this.password = password;
+//
+//     }
 
     public User(String name) {
         this.name=name;
@@ -51,7 +48,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("User"));
     }
     @Override
     @JsonIgnore
